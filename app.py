@@ -203,13 +203,14 @@ elif st.session_state.step == 'result':
     
     if any(x['您的回答'] == "沒有" for x in st.session_state.answers):
         st.error("⛔ 結果：不合格 (請改善)")
-        else:
+    else:
         st.balloons()
         st.success("✅ 結果：合格 (可作業)")
         
     st.write("")
     if st.button("🔄 返回首頁", type="primary", use_container_width=True):
         restart()
+
 
 
 
