@@ -189,7 +189,7 @@ elif st.session_state.step == 'quiz':
         if st.button("有 (正常)", key=f"yes_{idx}"):
             record_answer("有")
 
-with c2:
+    with c2:
         if st.button("沒有 (異常)", key=f"no_{idx}"):
             record_answer("沒有")
 
@@ -210,6 +210,7 @@ elif st.session_state.step == 'result':
     st.write("")
     if st.button("🔄 返回首頁", type="primary", use_container_width=True):
         restart()
+
 
 
 
