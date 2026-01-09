@@ -161,13 +161,13 @@ with st.container():
         name_input = st.text_input("姓名", value=st.session_state.user_name)
         st.write("")
 
-if st.button("開始檢查 ➡️", type="primary", use_container_width=True):
+if st.button("開始檢查", type="primary", use_container_width=True):
             if name_input.strip():
                 st.session_state.user_name = name_input
                 st.session_state.step = 'quiz'
                 st.rerun()
             else:
-                st.error("⚠️ 請輸入姓名")
+                st.error("請輸入姓名")
 
 # --- 頁面 2: 答題 (顯示圖片核心區) ---
 elif st.session_state.step == 'quiz':
@@ -224,6 +224,7 @@ elif st.session_state.step == 'result':
     st.write("")
     if st.button("🔄 返回首頁", type="primary", use_container_width=True):
         restart()
+
 
 
 
