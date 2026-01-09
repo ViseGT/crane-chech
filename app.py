@@ -70,11 +70,6 @@ st.markdown("""
         padding-left: 0px !important;
         padding-right: 0px !important;
     }
-    /* 確保主要內容區塊不會被過度擠壓 */
-    .block-container {
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
-    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -220,6 +215,7 @@ elif st.session_state.step == 'result':
     st.write("")
     if st.button("🔄 返回首頁", type="primary", use_container_width=True):
         restart()
+
 
 
 
