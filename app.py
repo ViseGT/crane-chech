@@ -121,7 +121,7 @@ st.session_state.answers.append({
 
 if st.session_state.current_q_index < len(QUESTIONS) - 1:
         st.session_state.current_q_index += 1
-    else:
+else:
         st.session_state.step = 'result'
     st.rerun()
 
@@ -210,6 +210,7 @@ df = pd.DataFrame(st.session_state.answers)
     st.write("")
     if st.button("🔄 返回首頁", type="primary", use_container_width=True):
         restart()
+
 
 
 
