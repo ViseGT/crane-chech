@@ -124,7 +124,7 @@ if st.session_state.step == 'login':
         st.write("")
         
         # 這裡的按鈕只存在於 Login 階段
-        if st.button("開始檢查 ➡️", type="primary", use_container_width=True):
+        if st.button("開始檢查", type="primary", use_container_width=True):
             if name_input.strip():
                 st.session_state.user_name = name_input
                 # 關鍵動作：切換狀態
@@ -132,7 +132,7 @@ if st.session_state.step == 'login':
                 # 關鍵動作：強制重新整理頁面
                 st.rerun()
             else:
-                st.error("⚠️ 請輸入姓名")
+                st.error("請輸入姓名")
 
 # 🟨 階段 2：答題頁面
 # 當 step 變成 'quiz' 後，程式會直接跳來這裡執行
@@ -181,4 +181,5 @@ elif st.session_state.step == 'result':
     st.write("")
     if st.button("🔄 返回首頁", type="primary", use_container_width=True):
         restart()
+
 
