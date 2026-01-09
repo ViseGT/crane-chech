@@ -198,7 +198,7 @@ elif st.session_state.step == 'result':
     st.title("📋 檢查結果")
     st.success(f"檢查員：{st.session_state.user_name}")
 
-df = pd.DataFrame(st.session_state.answers)
+    df = pd.DataFrame(st.session_state.answers)
     st.dataframe(df, use_container_width=True, hide_index=True)
     
     if any(x['您的回答'] == "沒有" for x in st.session_state.answers):
@@ -210,6 +210,7 @@ df = pd.DataFrame(st.session_state.answers)
     st.write("")
     if st.button("🔄 返回首頁", type="primary", use_container_width=True):
         restart()
+
 
 
 
