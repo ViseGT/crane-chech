@@ -77,22 +77,26 @@ QUESTIONS = [
 #              4. 邏輯初始化
 # ==========================================
 def init_state():
-    # 預設狀態是 'login'
     if 'step' not in st.session_state: st.session_state.step = 'login'
+    
+    # 初始化 4 個欄位
+    if 'main_contractor' not in st.session_state: st.session_state.main_contractor = ""
+    if 'sub_contractor' not in st.session_state: st.session_state.sub_contractor = ""
     if 'user_name' not in st.session_state: st.session_state.user_name = ""
+    if 'lifting_point' not in st.session_state: st.session_state.lifting_point = ""
+
     if 'current_q_index' not in st.session_state: st.session_state.current_q_index = 0
     if 'answers' not in st.session_state: st.session_state.answers = []
 
 def record_answer(answer_text):
     current_q_data = QUESTIONS[st.session_state.current_q_index]
-    status = "✅" if answer_text == "是" else "❌"
+    status = "✅" if answer_text == "有" else "❌"
     
     st.session_state.answers.append({
         "題目": current_q_data["text"],
         "您的回答": answer_text,
         "狀態": status 
     })
-    
     if st.session_state.current_q_index < len(QUESTIONS) - 1:
         st.session_state.current_q_index += 1
     else:
@@ -100,8 +104,13 @@ def record_answer(answer_text):
     st.rerun()
 
 def restart():
+    # 重置時清空所有資料
     st.session_state.current_q_index = 0
     st.session_state.answers = []
+    st.session_state.main_contractor = ""
+    st.session_state.sub_contractor = ""
+    st.session_state.user_name = ""
+    st.session_state.lifting_point = ""
     st.session_state.step = 'login'
     st.rerun()
 
@@ -198,6 +207,7 @@ elif st.session_state.step == 'result':
     st.write("")
     if st.button("🔄 返回首頁", type="primary", use_container_width=True):
         restart()
+
 
 
 
