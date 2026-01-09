@@ -69,12 +69,8 @@ st.markdown("""
 #              3. 題目資料
 # ==========================================
 QUESTIONS = [
-    {"text": "1. 外伸撐座是否「完全伸展」？", "image": "1.jpg"},
-    {"text": "2. 過捲預防裝置是否功能正常？", "image": "2.jpg"},
-    {"text": "3. 吊鉤防滑舌片是否無變形？", "image": None},
-    {"text": "4. 吊掛索具是否無斷絲、斷股？", "image": None},
-    {"text": "5. 作業範圍內是否已完成人員淨空？", "image": None},
-    {"text": "6. 吊掛作業是否由合格吊掛手指揮？", "image": None}
+    {"text": "1. 吊掛鉤頭插銷功能是否正常？", "image": "1.jpg"},
+    {"text": "2. 吊鉤防滑舌片是否無變形？", "image": "2.jpg"},
 ]
 
 # ==========================================
@@ -89,7 +85,7 @@ def init_state():
 
 def record_answer(answer_text):
     current_q_data = QUESTIONS[st.session_state.current_q_index]
-    status = "✅" if answer_text == "有" else "❌"
+    status = "✅" if answer_text == "是" else "❌"
     
     st.session_state.answers.append({
         "題目": current_q_data["text"],
@@ -161,12 +157,12 @@ elif st.session_state.step == 'quiz':
     idx = st.session_state.current_q_index
     
     with c1:
-        if st.button("有 (正常)", key=f"yes_{idx}", type="primary"):
-            record_answer("有")
+        if st.button("是 (正常)", key=f"yes_{idx}", type="primary"):
+            record_answer("是")
             
     with c2:
-        if st.button("沒有 (異常)", key=f"no_{idx}", type="secondary"):
-            record_answer("沒有")
+        if st.button("否 (異常)", key=f"no_{idx}", type="secondary"):
+            record_answer("否")
 
 # 🟩 階段 3：結果頁面
 elif st.session_state.step == 'result':
@@ -176,7 +172,7 @@ elif st.session_state.step == 'result':
     df = pd.DataFrame(st.session_state.answers)
     st.dataframe(df, use_container_width=True, hide_index=True)
     
-    if any(x['您的回答'] == "沒有" for x in st.session_state.answers):
+    if any(x['您的回答'] == "否" for x in st.session_state.answers):
         st.error("⛔ 結果：不合格 (請改善)")
     else:
         st.balloons()
@@ -185,3 +181,4 @@ elif st.session_state.step == 'result':
     st.write("")
     if st.button("🔄 返回首頁", type="primary", use_container_width=True):
         restart()
+
