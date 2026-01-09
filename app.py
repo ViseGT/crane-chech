@@ -177,17 +177,24 @@ elif st.session_state.step == 'quiz':
 # 🟩 階段 3：結果頁面
 elif st.session_state.step == 'result':
     st.title("📋 檢查結果")
-    st.success(f"檢查員：{st.session_state.user_name}")
     
+    # 顯示填寫的基本資料r}
+    st.info(f"""
+    **🕒 時間**：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+    **🏗️ 主承商**：{st.session_state.main_contractor}
+    **🛠️ 次承商**：{st.session_state.sub_contractor}
+    **👤 檢查員**：{st.session_state.user_name}
+    **📍 吊掛點**：{st.session_state.lifting_point}
+    """)
+
     df = pd.DataFrame(st.session_state.answers)
     st.dataframe(df, use_container_width=True, hide_index=True)
-    
     if any(x['您的回答'] == "否" for x in st.session_state.answers):
         st.error("⛔ 結果：不合格 (請改善)")
     else:
         st.balloons()
         st.success("✅ 結果：合格 (可作業)")
-        
+
     st.write("")
     if st.button("🔄 返回首頁", type="primary", use_container_width=True):
         restart()
