@@ -119,11 +119,11 @@ def record_answer(answer_text):
         "狀態": status 
     })
 
-if st.session_state.current_q_index < len(QUESTIONS) - 1:
+    if st.session_state.current_q_index < len(QUESTIONS) - 1:
         st.session_state.current_q_index += 1
-else:
+    else:
         st.session_state.step = 'result'
-st.rerun()
+    st.rerun()
 
 def restart():
     st.session_state.current_q_index = 0
@@ -210,6 +210,7 @@ elif st.session_state.step == 'result':
     st.write("")
     if st.button("🔄 返回首頁", type="primary", use_container_width=True):
         restart()
+
 
 
 
