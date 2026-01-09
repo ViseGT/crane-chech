@@ -193,7 +193,7 @@ elif st.session_state.step == 'quiz':
     
     st.write("")
     
-    c1, c2 = st.columns(2, gap="small")
+    c1, c2 = st.columns(2)
     idx = st.session_state.current_q_index
     
     with c1:
@@ -228,6 +228,7 @@ elif st.session_state.step == 'result':
     st.write("")
     if st.button("🔄 返回首頁", type="primary", use_container_width=True):
         restart()
+
 
 
 
