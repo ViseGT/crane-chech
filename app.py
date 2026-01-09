@@ -45,7 +45,7 @@ st.markdown("""
     
     /* 1.針對裝按鈕的容器，強制把間距縮到最小 */
     [data-testid="stHorizontalBlock"] {
-        gap: 5px !important; /* 👉 想要更近改成 2px，想要黏在一起改成 0px */
+        gap: 2px !important; /* 👉 想要更近改成 2px，想要黏在一起改成 0px */
     }
 
     /* 2.把欄位本身的內縮拿掉，讓按鈕可以長到最大 */
@@ -230,6 +230,7 @@ elif st.session_state.step == 'result':
     st.write("")
     if st.button("🔄 返回首頁", type="primary", use_container_width=True):
         restart()
+
 
 
 
