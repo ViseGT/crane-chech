@@ -1,83 +1,102 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
-
+import os
 # ==========================================
 #              1. 基礎設定
 # ==========================================
 st.set_page_config(page_title="起重機作業前自檢表", layout="centered")
-
 # ==========================================
-#              2. CSS 樣式優化 (修復按鈕消失問題)
+#              2. CSS 樣式
 # ==========================================
 st.markdown("""
     <style>
-    /* 隱藏預設選單 */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
-    
-    /* 全域字體 */
+    header {visibility: hidden;}
+
     html, body, [class*="css"]  {
         font-family: "Microsoft JhengHei", sans-serif;
     }
-    
-    /* 題目文字樣式 */
-    .question-text {
-        font-size: 26px !important;
-        font-weight: bold;
-        text-align: center;
-        margin-bottom: 20px;
-        line-height: 1.5;
-        color: #333;
-        padding: 10px;
-        background-color: #f8f9fa;
-        border-radius: 10px;
-    }
 
-    /* 按鈕基礎樣式 (預設黑字，避免白底白字看不見) */
-    .stButton button {
-        width: 100%;
-        height: 90px;
-        font-size: 28px !important;
-        font-weight: bold;
-        border-radius: 12px;
-        border: 2px solid #ddd; /* 加個邊框確保可見 */
-        color: #333; /* 預設文字黑色 */
-        transition: all 0.2s;
+    .question-box {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 15px;
+        text-align: center;
+        margin-bottom: 15px;
+        border: 2px solid #e0e0e0;
+    }
+    .question-text {
+        font-size: 22px !important;
+        font-weight: 900;
+        color: #1f1f1f;
+        line-height: 1.4;
+    }
+    
+    /* 按鈕樣式 */
+    button[kind="secondary"], button[kind="primary"] {
+        height: 80px !important;
+        width: 100% !important;
+        font-size: 26px !important;
+        font-weight: bold !important;
+        border-radius: 12px !important;
+        border: none !important;
     }
 
     /* 左邊按鈕 (綠色) */
-    div[data-testid="column"]:nth-of-type(1) .stButton button {
+    [data-testid="column"]:nth-of-type(1) button {
         background-color: #28a745 !important;
-        border-color: #28a745 !important;
-        color: white !important; /* 背景成功變綠才變白字 */
+        color: white !important;
     }
-    
-    /* 右邊按鈕 (紅色) */
-    div[data-testid="column"]:nth-of-type(2) .stButton button {
-        background-color: #dc3545 !important;
-        border-color: #dc3545 !important;
-        color: white !important; /* 背景成功變紅才變白字 */
+    [data-testid="column"]:nth-of-type(1) button:active {
+        background-color: #1e7e34 !important;
+        transform: scale(0.98);
     }
 
-    /* 按下時的效果 */
-    div[data-testid="column"] .stButton button:active {
+    /* 右邊按鈕 (紅色) */
+    [data-testid="column"]:nth-of-type(2) button {
+        background-color: #dc3545 !important;
+        color: white !important;
+    }
+    [data-testid="column"]:nth-of-type(2) button:active {
+        background-color: #bd2130 !important;
         transform: scale(0.98);
-        opacity: 0.9;
     }
     </style>
 """, unsafe_allow_html=True)
+# ==========================================
+#              3. 題目資料 (加上圖片設定)
+# ==========================================
+# 格式說明：
+# "text": "題目文字"
+# "image": "您上傳的圖片檔名" (如果沒有圖，就填 None)
 
-# ==========================================
-#              3. 題目資料
-# ==========================================
 QUESTIONS = [
-    "1. 外伸撐座是否「完全伸展」？",
-    "2. 過捲預防裝置是否功能正常？",
-    "3. 吊鉤防滑舌片是否無變形？",
-    "4. 吊掛索具是否無斷絲、斷股？",
-    "5. 作業範圍內是否已完成人員淨空？",
-    "6. 吊掛作業是否由合格吊掛手指揮？"
+    {
+        "text": "1. 外伸撐座是否「完全伸展」？", 
+        "image": "1.jpg"  # 請確保 GitHub 有上傳名為 1.jpg 的檔案
+    },
+    {
+        "text": "2. 過捲預防裝置是否功能正常？", 
+        "image": "2.jpg"  # 請確保 GitHub 有上傳名為 2.jpg 的檔案
+    },
+    {
+        "text": "3. 吊鉤防滑舌片是否無變形？", 
+        "image": None     # 這一題沒有圖片，填 None
+    },
+    {
+        "text": "4. 吊掛索具是否無斷絲、斷股？", 
+        "image": None
+    },
+    {
+        "text": "5. 作業範圍內是否已完成人員淨空？", 
+        "image": None
+    },
+    {
+        "text": "6. 吊掛作業是否由合格吊掛手指揮？", 
+        "image": None
+    }
 ]
 
 # ==========================================
@@ -91,21 +110,19 @@ def init_state():
     if 'answers' not in st.session_state: st.session_state.answers = []
 
 def record_answer(answer_text):
-    """記錄答案並跳下一題"""
-    current_q = QUESTIONS[st.session_state.current_q_index]
+    current_q_data = QUESTIONS[st.session_state.current_q_index]
     status = "✅" if answer_text == "有" else "❌"
-    
-    st.session_state.answers.append({
-        "題目": current_q,
+
+st.session_state.answers.append({
+        "題目": current_q_data["text"], # 只存文字，不存圖片路徑
         "您的回答": answer_text,
         "狀態": status 
     })
-    
-    if st.session_state.current_q_index < len(QUESTIONS) - 1:
+
+if st.session_state.current_q_index < len(QUESTIONS) - 1:
         st.session_state.current_q_index += 1
     else:
         st.session_state.step = 'result'
-    
     st.rerun()
 
 def restart():
@@ -117,76 +134,84 @@ def restart():
 init_state()
 
 # ==========================================
-#              5. 頁面顯示邏輯
+#              5. 頁面顯示
 # ==========================================
 
 # --- 頁面 1: 登入 ---
 if st.session_state.step == 'login':
     st.title("🏗️ 起重機作業前自檢")
-    
-    with st.container():
-        st.markdown("### 👷 請輸入檢查人員資料")
-        name_input = st.text_input("姓名 (必填)", value=st.session_state.user_name)
-        
-        st.write("") # 空格
-        
-        if st.button("開始檢查 ➡️", type="primary", use_container_width=True):
+    st.write("")
+
+with st.container():
+        st.info("請輸入檢查人員姓名")
+        name_input = st.text_input("姓名", value=st.session_state.user_name)
+        st.write("")
+
+if st.button("開始檢查 ➡️", type="primary", use_container_width=True):
             if name_input.strip():
                 st.session_state.user_name = name_input
                 st.session_state.step = 'quiz'
                 st.rerun()
             else:
-                st.error("⚠️ 請輸入姓名才能開始！")
+                st.error("⚠️ 請輸入姓名")
 
-# --- 頁面 2: 檢查過程 ---
+# --- 頁面 2: 答題 (顯示圖片核心區) ---
 elif st.session_state.step == 'quiz':
-    # 進度條
-    progress = (st.session_state.current_q_index + 1) / len(QUESTIONS)
-    st.progress(progress)
-    st.caption(f"進度: {st.session_state.current_q_index + 1} / {len(QUESTIONS)}")
+    p = (st.session_state.current_q_index + 1) / len(QUESTIONS)
+    st.progress(p)
+
+# 取得當前題目的資料 (包含文字和圖片)
+    q_data = QUESTIONS[st.session_state.current_q_index]
     
-    # 顯示題目
-    q_text = QUESTIONS[st.session_state.current_q_index]
-    st.markdown(f'<div class="question-text">{q_text}</div>', unsafe_allow_html=True)
+    # 1. 顯示題目文字
+    st.markdown(f'''
+    <div class="question-box">
+            <div class="question-text">{q_data["text"]}</div>
+        </div>
+    ''', unsafe_allow_html=True)
     
-    st.write("") 
-    st.write("") # 增加間距
+    # 2. 顯示圖片 (如果有設定的話)
+    if q_data["image"]:
+        # 檢查檔案是否存在，避免報錯
+        if os.path.exists(q_data["image"]):
+            st.image(q_data["image"], use_container_width=True)
+        else:
+            # 如果找不到圖片，顯示提示 (僅測試用，正式上線可拿掉)
+            st.warning(f"找不到圖片: {q_data['image']}，請確認 GitHub 是否已上傳。")
     
-    # 建立兩欄
+    st.write("")
+
+# 按鈕區
     c1, c2 = st.columns(2, gap="small")
-    
-    # 為了避免按鈕消失或重複，我們給每個按鈕一個隨題號變化的 key
     idx = st.session_state.current_q_index
     
     with c1:
-        # 左邊按鈕
-        if st.button("有", key=f"yes_{idx}"):
+        if st.button("有 (正常)", key=f"yes_{idx}"):
             record_answer("有")
-            
-    with c2:
-        # 右邊按鈕
-        if st.button("沒有", key=f"no_{idx}"):
+
+with c2:
+        if st.button("沒有 (異常)", key=f"no_{idx}"):
             record_answer("沒有")
 
-# --- 頁面 3: 結果總覽 ---
+# --- 頁面 3: 結果 ---
 elif st.session_state.step == 'result':
-    st.title("📋 檢查結果報告")
+    st.title("📋 檢查結果")
+    st.success(f"檢查員：{st.session_state.user_name}")
+
+df = pd.DataFrame(st.session_state.answers)
+    st.dataframe(df, use_container_width=True, hide_index=True)
     
-    st.info(f"👤 檢查人員：{st.session_state.user_name}")
-    st.caption(f"🕒 時間：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    
-    # 顯示結果表格
-    df = pd.DataFrame(st.session_state.answers)
-    st.table(df)
-    
-    # 判斷結果
-    has_error = any(x['您的回答'] == "沒有" for x in st.session_state.answers)
-    
-    if has_error:
-        st.error("⛔ 檢查未通過！請立即改善缺失項目。")
-    else:
-        st.success("✅ 檢查通過！可以開始作業。")
+    if any(x['您的回答'] == "沒有" for x in st.session_state.answers):
+        st.error("⛔ 結果：不合格 (請改善)")
+        else:
+        st.balloons()
+        st.success("✅ 結果：合格 (可作業)")
         
-    st.markdown("---")
-    if st.button("🔄 返回首頁", use_container_width=True):
+    st.write("")
+    if st.button("🔄 返回首頁", type="primary", use_container_width=True):
         restart()
+
+
+
+
+
