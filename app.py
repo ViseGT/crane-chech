@@ -6,25 +6,29 @@ import os
 #              1. 基礎設定
 # ==========================================
 st.set_page_config(page_title="起重機作業前自檢表", layout="centered")
-# ==========================================
-#              2. CSS 樣式
+
+# ======================================
+#              2. CSS 樣式 (針對身分強制上色版)
 # ==========================================
 st.markdown("""
     <style>
+    /* 隱藏選單 */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
+
 
     html, body, [class*="css"]  {
         font-family: "Microsoft JhengHei", sans-serif;
     }
 
+    /* 題目區塊 */
     .question-box {
         background-color: #f8f9fa;
         padding: 15px;
         border-radius: 15px;
         text-align: center;
-        margin-bottom: 15px;
+        margin-bottom: 10px;
         border: 2px solid #e0e0e0;
     }
     .question-text {
@@ -33,38 +37,48 @@ st.markdown("""
         color: #1f1f1f;
         line-height: 1.4;
     }
-    
-    /* 按鈕樣式 */
-    button[kind="secondary"], button[kind="primary"] {
+
+    /* ==================================================
+       重點修正：針對 "kind" (按鈕種類) 強制上色
+       ================================================== */
+
+    /* 1. 針對 type="primary" 的按鈕 (我們用來當作 "是/綠色") */
+    button[kind="primary"] {
+        background-color: #28a745 !important; /* 綠色背景 */
+        color: white !important;             /* 白色文字 */
+        border: none !important;             /* 移除邊框 */
+        height: 80px !important;             /* 高度 */
+        font-size: 26px !important;          /* 字體大小 */
+        font-weight: bold !important;
+    }
+    /* 按下去的時候 */
+    button[kind="primary"]:active, button[kind="primary"]:focus, button[kind="primary"]:hover {
+        background-color: #1e7e34 !important; /* 深綠色 */
+        color: white !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    /* 2. 針對 type="secondary" 的按鈕 (我們用來當作 "否/紅色") */
+    button[kind="secondary"] {
+        background-color: #dc3545 !important; /* 紅色背景 */
+        color: white !important;             /* 白色文字 */
+        border: none !important;
         height: 80px !important;
-        width: 100% !important;
         font-size: 26px !important;
         font-weight: bold !important;
-        border-radius: 12px !important;
+    }
+    /* 按下去的時候 */
+    button[kind="secondary"]:active, button[kind="secondary"]:focus, button[kind="secondary"]:hover {
+        background-color: #bd2130 !important; /* 深紅色 */
+        color: white !important;
         border: none !important;
+        box-shadow: none !important;
     }
 
-    /* 左邊按鈕 (綠色) */
-    [data-testid="column"]:nth-of-type(1) button {
-        background-color: #28a745 !important;
-        color: white !important;
-    }
-    [data-testid="column"]:nth-of-type(1) button:active {
-        background-color: #1e7e34 !important;
-        transform: scale(0.98);
-    }
-
-    /* 右邊按鈕 (紅色) */
-    [data-testid="column"]:nth-of-type(2) button {
-        background-color: #dc3545 !important;
-        color: white !important;
-    }
-    [data-testid="column"]:nth-of-type(2) button:active {
-        background-color: #bd2130 !important;
-        transform: scale(0.98);
-    }
     </style>
 """, unsafe_allow_html=True)
+
 # ==========================================
 #              3. 題目資料 (加上圖片設定)
 # ==========================================
@@ -210,6 +224,7 @@ elif st.session_state.step == 'result':
     st.write("")
     if st.button("🔄 返回首頁", type="primary", use_container_width=True):
         restart()
+
 
 
 
