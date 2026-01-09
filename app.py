@@ -186,12 +186,12 @@ elif st.session_state.step == 'quiz':
     idx = st.session_state.current_q_index
     
     with c1:
-        if st.button("有 (正常)", key=f"yes_{idx}"):
-            record_answer("有")
+        if st.button("是 (正常)", key=f"yes_{idx}"):
+            record_answer("是")
 
     with c2:
-        if st.button("沒有 (異常)", key=f"no_{idx}"):
-            record_answer("沒有")
+        if st.button("否 (異常)", key=f"no_{idx}"):
+            record_answer("否")
 
 # --- 頁面 3: 結果 ---
 elif st.session_state.step == 'result':
@@ -201,7 +201,7 @@ elif st.session_state.step == 'result':
     df = pd.DataFrame(st.session_state.answers)
     st.dataframe(df, use_container_width=True, hide_index=True)
     
-    if any(x['您的回答'] == "沒有" for x in st.session_state.answers):
+    if any(x['您的回答'] == "否" for x in st.session_state.answers):
         st.error("⛔ 結果：不合格 (請改善)")
     else:
         st.balloons()
@@ -210,6 +210,7 @@ elif st.session_state.step == 'result':
     st.write("")
     if st.button("🔄 返回首頁", type="primary", use_container_width=True):
         restart()
+
 
 
 
