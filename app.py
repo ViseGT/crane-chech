@@ -43,7 +43,7 @@ st.markdown("""
         background-color: #28a745 !important;
         color: white !important;
         border: none !important;
-        height: 120px !important;
+        height: 80px !important;
         font-size: 36px !important;
         font-weight: bold !important;
     }
@@ -55,7 +55,7 @@ st.markdown("""
         background-color: #dc3545 !important;
         color: white !important;
         border: none !important;
-        height: 120px !important;
+        height: 80px !important;
         font-size: 36px !important;
         font-weight: bold !important;
     }
@@ -220,6 +220,7 @@ elif st.session_state.step == 'result':
     st.write("")
     if st.button("🔄 返回首頁", type="primary", use_container_width=True):
         restart()
+
 
 
 
