@@ -43,8 +43,8 @@ st.markdown("""
         background-color: #28a745 !important;
         color: white !important;
         border: none !important;
-        height: 80px !important;
-        font-size: 26px !important;
+        height: 120px !important;
+        font-size: 36px !important;
         font-weight: bold !important;
     }
     button[kind="primary"]:active {
@@ -55,12 +55,25 @@ st.markdown("""
         background-color: #dc3545 !important;
         color: white !important;
         border: none !important;
-        height: 80px !important;
-        font-size: 26px !important;
+        height: 120px !important;
+        font-size: 36px !important;
         font-weight: bold !important;
     }
     button[kind="secondary"]:active {
         background-color: #bd2130 !important;
+    }
+    /* ==================================================
+       新增：強制縮小欄位間距 (讓按鈕靠超近)
+       ================================================== */
+    /* 設定所有欄位的左右留白只剩 2px (您可以改 0px 讓它們黏住) */
+    [data-testid="column"] {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+    /* 確保主要內容區塊不會被過度擠壓 */
+    .block-container {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -207,6 +220,7 @@ elif st.session_state.step == 'result':
     st.write("")
     if st.button("🔄 返回首頁", type="primary", use_container_width=True):
         restart()
+
 
 
 
