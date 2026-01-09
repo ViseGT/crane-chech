@@ -90,7 +90,7 @@ def init_state():
 
 def record_answer(answer_text):
     current_q_data = QUESTIONS[st.session_state.current_q_index]
-    status = "✅" if answer_text == "有" else "❌"
+    status = "✅" if answer_text == "是" else "❌"
     
     st.session_state.answers.append({
         "題目": current_q_data["text"],
@@ -207,6 +207,7 @@ elif st.session_state.step == 'result':
     st.write("")
     if st.button("🔄 返回首頁", type="primary", use_container_width=True):
         restart()
+
 
 
 
