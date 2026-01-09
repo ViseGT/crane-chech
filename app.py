@@ -111,28 +111,38 @@ init_state()
 #              5. 頁面顯示流程 (State Machine)
 # ==========================================
 
-# 🟥 階段 1：登入頁面
-# 只有當 step 等於 'login' 時，這裡的程式碼才會執行
-# 一旦切換到 'quiz'，這裡包含「按鈕」的所有東西都會被跳過（也就是隱藏）
+# 🟥 階段 1：登入頁面 (修改為 4 個欄位)
 if st.session_state.step == 'login':
     st.title("🏗️ 起重機作業前自檢")
     st.write("")
     
     with st.container():
-        st.info("請輸入檢查人員姓名")
-        name_input = st.text_input("姓名", value=st.session_state.user_name)
+        st.markdown("請填寫作業資料")
+
+        # 四個輸入框
+        main_input = st.text_input("1. 主承商 (必填)", value=st.session_state.main_contractor)
+        sub_input = st.text_input("2. 次承商 (必填)", value=st.session_state.sub_contractor)
+        name_input = st.text_input("3. 檢查人員 (必填)", value=st.session_state.user_name)
+        point_input = st.text_input("4. 吊掛點位 (必填)", value=st.session_state.lifting_point)
+
         st.write("")
         
-        # 這裡的按鈕只存在於 Login 階段
         if st.button("開始檢查", type="primary", use_container_width=True):
-            if name_input.strip():
+            # 檢查是否全部都有填寫 (使用 .strip() 去除空白)
+            if (main_input.strip() and sub_input.strip() and 
+                name_input.strip() and point_input.strip()):
+                
+                # 儲存資料到 Session State
+                st.session_state.main_contractor = main_input
+                st.session_state.sub_contractor = sub_input
                 st.session_state.user_name = name_input
-                # 關鍵動作：切換狀態
+                st.session_state.lifting_point = point_input
+                
+                # 切換狀態
                 st.session_state.step = 'quiz'
-                # 關鍵動作：強制重新整理頁面
                 st.rerun()
             else:
-                st.error("請輸入姓名")
+                st.error("⚠️ 資料不完整！請確認 4 個欄位都已填寫。")
 
 # 🟨 階段 2：答題頁面
 # 當 step 變成 'quiz' 後，程式會直接跳來這裡執行
@@ -181,5 +191,6 @@ elif st.session_state.step == 'result':
     st.write("")
     if st.button("🔄 返回首頁", type="primary", use_container_width=True):
         restart()
+
 
 
