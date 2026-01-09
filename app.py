@@ -180,11 +180,11 @@ elif st.session_state.step == 'result':
     
     # 顯示填寫的基本資料r}
     st.info(f"""
-    **🕒 時間**：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-    **🏗️ 主承商**：{st.session_state.main_contractor}
-    **🛠️ 次承商**：{st.session_state.sub_contractor}
-    **👤 檢查員**：{st.session_state.user_name}
-    **📍 吊掛點**：{st.session_state.lifting_point}
+    **時間**：{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+    **主承商**：{st.session_state.main_contractor}
+    **次承商**：{st.session_state.sub_contractor}
+    **檢查員**：{st.session_state.user_name}
+    **吊掛點**：{st.session_state.lifting_point}
     """)
 
     df = pd.DataFrame(st.session_state.answers)
@@ -198,6 +198,7 @@ elif st.session_state.step == 'result':
     st.write("")
     if st.button("🔄 返回首頁", type="primary", use_container_width=True):
         restart()
+
 
 
 
