@@ -38,37 +38,52 @@ st.markdown("""
         line-height: 1.4;
     }
 
-    /* 按鈕樣式 (primary=綠色, secondary=紅色) */
+    /*=========================================================
+       🔥🔥🔥 終極間距調整區 🔥🔥🔥
+       這裡控制按鈕靠多近，請修改 gap 的數值
+       ========================================================= */
+    
+    /* 1.針對裝按鈕的容器，強制把間距縮到最小 */
+    [data-testid="stHorizontalBlock"] {
+        gap: 5px !important; /* 👉 想要更近改成 2px，想要黏在一起改成 0px */
+    }
+
+    /* 2.把欄位本身的內縮拿掉，讓按鈕可以長到最大 */
+    [data-testid="column"] {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+        min-width: 0px !important; /* 防止被瀏覽器強制撐開 */
+    }
+    /* =========================================================
+       按鈕樣式區
+       ========================================================= */
+
+    /*綠色按鈕 (Primary) */
     button[kind="primary"] {
         background-color: #28a745 !important;
         color: white !important;
         border: none !important;
         height: 80px !important;
-        font-size: 36px !important;
+        font-size: 26px !important;
         font-weight: bold !important;
+        width: 100% !important; /* 確保按鈕填滿欄位 */
     }
     button[kind="primary"]:active {
         background-color: #1e7e34 !important;
     }
 
+    /* 紅色按鈕 (Secondary) */
     button[kind="secondary"] {
         background-color: #dc3545 !important;
         color: white !important;
         border: none !important;
         height: 80px !important;
-        font-size: 36px !important;
+        font-size: 26px !important;
         font-weight: bold !important;
+        width: 100% !important; /* 確保按鈕填滿欄位 */
     }
     button[kind="secondary"]:active {
         background-color: #bd2130 !important;
-    }
-    /* ==================================================
-       新增：強制縮小欄位間距 (讓按鈕靠超近)
-       ================================================== */
-    /* 設定所有欄位的左右留白只剩 2px (您可以改 0px 讓它們黏住) */
-    [data-testid="column"] {
-        padding-left: 0px !important;
-        padding-right: 0px !important;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -215,6 +230,7 @@ elif st.session_state.step == 'result':
     st.write("")
     if st.button("🔄 返回首頁", type="primary", use_container_width=True):
         restart()
+
 
 
 
