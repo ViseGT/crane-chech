@@ -61,10 +61,10 @@ st.markdown("""
         background-color: #28a745 !important;
         color: white !important;
         border: none !important;
-        height: 120px !important;
+        height: 80px !important;
         font-size: 26px !important;
         font-weight: bold !important;
-        width: 150% !important; /* 確保按鈕填滿欄位 */
+        width: 100% !important; /* 確保按鈕填滿欄位 */
     }
     button[kind="primary"]:active {
         background-color: #1e7e34 !important;
@@ -75,10 +75,10 @@ st.markdown("""
         background-color: #dc3545 !important;
         color: white !important;
         border: none !important;
-        height: 120px !important;
+        height: 80px !important;
         font-size: 26px !important;
         font-weight: bold !important;
-        width: 150% !important; /* 確保按鈕填滿欄位 */
+        width: 100% !important; /* 確保按鈕填滿欄位 */
     }
     button[kind="secondary"]:active {
         background-color: #bd2130 !important;
@@ -228,6 +228,7 @@ elif st.session_state.step == 'result':
     st.write("")
     if st.button("🔄 返回首頁", type="primary", use_container_width=True):
         restart()
+
 
 
 
